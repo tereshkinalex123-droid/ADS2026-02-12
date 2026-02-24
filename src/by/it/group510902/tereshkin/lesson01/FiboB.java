@@ -32,5 +32,4 @@ public class FiboB {
         }
         return arr[n];
     }
-
 }
