@@ -16,6 +16,8 @@ package by.it.group510902.tereshkin.lesson02;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
+import java.util.Arrays;
+
 
 public class C_GreedyKnapsack {
     public static void main(String[] args) throws FileNotFoundException {
@@ -44,6 +46,18 @@ public class C_GreedyKnapsack {
         //итогом является максимально воможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
         double result = 0;
+        Arrays.sort(items);
+        int freeweight = W;
+        for(int i = 0; i < items.length; i++){
+            if (items[i].weight <= freeweight){
+                result += items[i].cost;
+                freeweight -= items[i].weight;
+            }
+            else{
+                result += items[i].cost * ((double) freeweight / items[i].weight);
+                break;
+            }
+        }
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
@@ -74,10 +88,9 @@ public class C_GreedyKnapsack {
 
         @Override
         public int compareTo(Item o) {
-            //тут может быть ваш компаратор
-
-
-            return 0;
+            double r1 = (double) cost / weight;
+            double r2 = (double) o.cost / o.weight;
+            return Double.compare(r2, r1);
         }
     }
 }
