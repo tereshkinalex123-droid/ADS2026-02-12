@@ -57,8 +57,55 @@ public class C_GetInversions {
         int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
 
+        int step = 1;
+        int left = 0;
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        while (step < n){
+            int mid;
+            int right;
+            while (left < n - step){
+                mid = left + step - 1;
+                right = Math.min(left + step*2 - 1, n-1);
+                result += merge(a, left, mid, right);
+                left += step*2;
+            }
+            left =0;
+            step *=2;
+        }
+
+
+            //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        return result/2;
+    }
+
+
+    private int merge(int a[], int left, int mid, int right){
+        int[] cur = new int[right-left+1];
+        int i = left;
+        int j = mid + 1;
+        int k = 0;
+        int ch = 0;
+
+        while (i < mid+1 && j < right+1){
+            if (a[i]<a[j]){
+                cur[k++] = a[i++];
+            }
+            else{
+                cur[k++] = a[j++];
+                ch += mid - i + 1;
+            }
+        }
+
+        while (i < mid+1){
+            cur[k++] = a[i++];
+        };
+
+        while (j < right+1){
+            cur[k++] = a[j++];
+        };
+        for (int o = 0; o < right-left+1; o++){
+            a[left + o] = cur[o];
+        }
+        return ch;
     }
 }
