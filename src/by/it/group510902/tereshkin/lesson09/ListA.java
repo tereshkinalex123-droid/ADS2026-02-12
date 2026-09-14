@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class ListA<E> implements List<E> {
+    private Object[] elements = new Object[10];
+    private int size = 0;
 
     //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
 
@@ -16,22 +18,45 @@ public class ListA<E> implements List<E> {
     /////////////////////////////////////////////////////////////////////////
     @Override
     public String toString() {
-        return "";
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < size; i++) {
+            sb.append(elements[i]);
+            if (i < size - 1) sb.append(", ");
+        }
+        return sb.append("]").toString();
     }
 
     @Override
     public boolean add(E e) {
-        return false;
+        if (size == elements.length) {
+            Object[] bigger = new Object[elements.length * 2];
+            for (int i = 0; i < elements.length; i++) {
+                bigger[i] = elements[i];
+            }
+            elements = bigger;
+        }
+        elements[size] = e;
+        size++;
+        return true;
     }
 
     @Override
     public E remove(int index) {
-        return null;
+        if (index < 0 || index >= this.size) {
+            throw new IndexOutOfBoundsException("index: " + index + ", size: " + size);
+        }
+        Object ans = elements[index];
+        for (int i = index; i < this.size-1; i++){
+            elements[i] = elements[i+1];
+        }
+        elements[this.size-1] = null;
+        this.size --;
+        return (E) ans;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     /////////////////////////////////////////////////////////////////////////
