@@ -15,39 +15,107 @@ public class ListB<E> implements List<E> {
     //////               Обязательные к реализации методы             ///////
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
+    private Object[] elements = new Object[10];
+    private int size = 0;
+
     @Override
     public String toString() {
-        return "";
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < size; i++) {
+            sb.append(elements[i]);
+            if (i < size - 1) sb.append(", ");
+        }
+        return sb.append("]").toString();
     }
 
     @Override
     public boolean add(E e) {
-        return false;
+        if (size == elements.length) {
+            Object[] bigger = new Object[elements.length * 2];
+            for (int i = 0; i < elements.length; i++) {
+                bigger[i] = elements[i];
+            }
+            elements = bigger;
+        }
+        elements[size] = e;
+        size++;
+        return true;
     }
 
     @Override
     public E remove(int index) {
-        return null;
+        if (index < 0 || index >= this.size) {
+            throw new IndexOutOfBoundsException("index: " + index + ", size: " + size);
+        }
+        Object ans = elements[index];
+        for (int i = index; i < this.size-1; i++){
+            elements[i] = elements[i+1];
+        }
+        elements[this.size-1] = null;
+        this.size --;
+        return (E) ans;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public void add(int index, E element) {
+        if (index < 0 || index > this.size) {
+            throw new IndexOutOfBoundsException("index: " + index + ", size: " + size);
+        }
+        if (size == elements.length) {
+            Object[] bigger = new Object[elements.length * 2];
+            for (int i = 0; i < index; i++) {
+                bigger[i] = elements[i];
+            }
 
+            for (int i = size; i > index; i--){
+                bigger[i] = elements[i-1];
+            }
+            bigger[index] = element;
+            elements = bigger;
+            size++;
+        }
+        else {
+            for (int i = size; i > index; i--) {
+                elements[i] = elements[i - 1];
+            }
+            elements[index] = element;
+            size++;
+        }
     }
 
     @Override
     public boolean remove(Object o) {
-        return false;
+        int i = 0;
+        while (i < size) {
+            boolean eq = (o == null) ? (elements[i] == null) : o.equals(elements[i]);//сравнение elements[i] с o
+            if (eq) break;
+            i++;
+        }
+        if (i == size) {
+            return false;
+        }
+        int j;
+        for (j = i; j < size - 1; j++) {
+            elements[j] = elements[j + 1];
+        }
+        elements[j] = null;
+        size--;
+        return true;
     }
 
     @Override
     public E set(int index, E element) {
-        return null;
+        if (index < 0 || index >= this.size) {
+            throw new IndexOutOfBoundsException("index: " + index + ", size: " + size);
+        }
+        Object ans = elements[index];
+        elements[index] = element;
+        return (E) ans;
     }
 
 
