@@ -16,7 +16,20 @@ public class ListB<E> implements List<E> {
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
     private Object[] elements = new Object[10];
-    private int size = 0;
+    private int size;
+    private int capacity;
+
+    private static final int DEFAULT_CAPACITY = 10;
+
+    public ListB() {
+        this.elements = new Object[DEFAULT_CAPACITY];
+        this.size = 0;
+    }
+
+    public ListB(int capacity) {
+        this.elements = new Object[capacity];
+        this.size = 0;
+    }
 
     @Override
     public String toString() {
@@ -45,7 +58,7 @@ public class ListB<E> implements List<E> {
     @Override
     public E remove(int index) {
         if (index < 0 || index >= this.size) {
-            throw new IndexOutOfBoundsException("index: " + index + ", size: " + size);
+            return null;
         }
         Object ans = elements[index];
         for (int i = index; i < this.size-1; i++){
@@ -64,7 +77,7 @@ public class ListB<E> implements List<E> {
     @Override
     public void add(int index, E element) {
         if (index < 0 || index > this.size) {
-            throw new IndexOutOfBoundsException("index: " + index + ", size: " + size);
+            return;
         }
         if (size == elements.length) {
             Object[] bigger = new Object[elements.length * 2];
@@ -92,8 +105,9 @@ public class ListB<E> implements List<E> {
     public boolean remove(Object o) {
         int i = 0;
         while (i < size) {
-            boolean eq = (o == null) ? (elements[i] == null) : o.equals(elements[i]);//сравнение elements[i] с o
-            if (eq) break;
+            if (o.equals(elements[i])){
+                break;
+            };
             i++;
         }
         if (i == size) {
@@ -111,43 +125,57 @@ public class ListB<E> implements List<E> {
     @Override
     public E set(int index, E element) {
         if (index < 0 || index >= this.size) {
-            throw new IndexOutOfBoundsException("index: " + index + ", size: " + size);
+            return null;
         }
         Object ans = elements[index];
         elements[index] = element;
         return (E) ans;
     }
 
-
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
+
 
 
     @Override
     public void clear() {
-
+        elements = new Object[elements.length];
+        size = 0;
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        for (int i = 0; i < size; i++) {
+            if (o.equals(elements[i])){
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public E get(int index) {
-        return null;
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        return (E) elements[index];
     }
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        return indexOf(o) >= 0;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        for (int i = size - 1; i >= 0; i--) {
+            if (o.equals(elements[i])){
+                return i;
+            }
+        }
+        return -1;
     }
 
 
