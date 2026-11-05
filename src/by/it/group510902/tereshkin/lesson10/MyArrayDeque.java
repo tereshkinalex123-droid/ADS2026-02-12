@@ -91,7 +91,6 @@ public class MyArrayDeque<E> implements Collection<E> {
         return value;
     }
 
-    // ---------- методы Collection, которых не хватало ----------
 
     @Override
     public boolean isEmpty() { return size == 0; }
